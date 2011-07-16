@@ -14,13 +14,13 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "octocat-herder"
-  gem.homepage = "http://github.com/jhelwig/octocat-herder"
-  gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "jacob@technosorcery.net"
-  gem.authors = ["Jacob Helwig"]
+  gem.name = 'octocat_herder'
+  gem.homepage = 'http://github.com/jhelwig/octocat_herder'
+  gem.license = 'BSD'
+  gem.summary = 'An interface to the v3 GitHub API'
+  gem.description = 'TODO: longer description of your gem'
+  gem.email = 'jacob@technosorcery.net'
+  gem.authors = ['Jacob Helwig']
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -43,7 +43,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "octocat-herder #{version}"
+  rdoc.title = "octocat_herder #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
