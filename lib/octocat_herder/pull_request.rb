@@ -13,7 +13,7 @@ class OctocatHerder
 
       pull_requests = raw_get(
         conn,
-        '/repos/#{CGI.escape(owner_login.to_s)}/#{CGI.escape(repository_name.to_s)}/pulls',
+        "/repos/#{CGI.escape(owner_login.to_s)}/#{CGI.escape(repository_name.to_s)}/pulls",
         :paginated => true,
         :params    => { :state => status },
         :headers   => { 'Accept' => 'application/vnd.github-pull.full+json' }
