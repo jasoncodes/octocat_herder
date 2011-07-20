@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = 'http://github.com/jhelwig/octocat_herder'
   gem.license = 'BSD'
   gem.summary = 'An interface to the v3 GitHub API'
-  gem.description = 'TODO: longer description of your gem'
+  gem.description = 'This gem provides Ruby bindings to the v3 GitHub API'
   gem.email = 'jacob@technosorcery.net'
   gem.authors = ['Jacob Helwig']
   # dependencies defined in Gemfile
