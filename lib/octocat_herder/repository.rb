@@ -1,3 +1,5 @@
+require 'cgi'
+
 require 'octocat_herder/base'
 require 'octocat_herder/connection'
 require 'octocat_herder/user'
@@ -26,8 +28,8 @@ class OctocatHerder
       @raw['owner']['id']
     end
 
-    def owner_gravatar_url
-      @raw['owner']['gravatar_url']
+    def owner_avatar_url
+      @raw['owner']['avatar_url']
     end
 
     def owner_url
@@ -36,6 +38,20 @@ class OctocatHerder
 
     def owner
       OctocatHerder::User.fetch(owner_login, connection)
+    end
+
+    def open_pull_requests
+      OctocatHerder::PullRequest.find_for_repository(owner_login, name, 'open')
+    end
+
+    def closed_pull_requests
+      OctocatHerder::PullRequest.find_for_repository(owner_login, name, 'closed')
+    end
+
+    def source
+      return unless @raw['source']
+
+      OctocatHerder::Repository.new(@raw['source'], connection)
     end
 
     private
@@ -50,18 +66,27 @@ class OctocatHerder
 
       repositories = raw_get(
         conn,
-        "/#{url_base}/#{login}/repos",
+        "/#{url_base}/#{CGI.escape(login)}/repos",
         :paginated => true,
-        :params => { :type => repository_type }
+        :params    => { :type => repository_type }
       )
 
       repositories.map do |repo|
-        OctocatHerder::Repository.new(repo, conn)
+        new(repo, conn)
       end
     end
 
+    def self.fetch(login, repository_name, conn = OctocatHerder::Connection.new)
+      repo_data = raw_get(
+        conn,
+        "/repos/#{CGI.escape(login)}/#{CGI.escape(repository_name)}"
+      )
+
+      new(repo_data, conn)
+    end
+
     def additional_attributes
-      ['owner_login', 'owner_id', 'owner_gravatar_url', 'owner_url']
+      ['owner_login', 'owner_id', 'owner_avatar_url', 'owner_url']
     end
   end
 end

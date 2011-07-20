@@ -11,7 +11,7 @@ class OctocatHerder
     end
 
     def repositories
-      OctocatHerder::Repository.list_all(login, user_type, connection)
+      @repositories ||= OctocatHerder::Repository.list_all(login, user_type, connection)
     end
 
     # The user id can't be handled by the method_missing magic from

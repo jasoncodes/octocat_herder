@@ -1,7 +1,9 @@
 require 'cgi'
 require 'link_header'
-require 'octocat_herder/connection'
+require 'parsedate'
 require 'uri'
+
+require 'octocat_herder/connection'
 
 class OctocatHerder
   class Base
@@ -13,7 +15,7 @@ class OctocatHerder
     end
 
     def method_missing(id, *args)
-      unless @raw.keys.include? id.id2name
+      unless @raw and @raw.keys.include?(id.id2name)
         raise NoMethodError.new("undefined method #{id.id2name} for #{self}:#{self.class}")
       end
 
@@ -21,14 +23,15 @@ class OctocatHerder
     end
 
     def available_attributes
-      attrs = @raw.keys.reject do |k|
+      attrs = []
+      attrs += @raw.keys.reject do |k|
         [
           'id',
           'type',
         ].include? k
-      end
+      end if @raw
 
-      attrs + additional_attributes
+      (attrs + additional_attributes).uniq
     end
 
     private
@@ -74,6 +77,12 @@ class OctocatHerder
 
     def additional_attributes
       []
+    end
+
+    def parse_date_time(date_time)
+      return nil unless date_time
+
+      Time.utc(*ParseDate.parsedate(date_time))
     end
   end
 end
