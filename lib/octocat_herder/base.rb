@@ -54,63 +54,73 @@ class OctocatHerder
       (attrs + additional_attributes).uniq
     end
 
-    private
+    # Automatically bring in the class methods when we include the
+    # instance methods from OctocatHerder::Base.
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
 
-    # This is intended to be used by the various classes implementing
-    # the GitHub API end-points.
-    #
-    # @param [OctocatHerder::Connection] conn An instance of OctocatHerder::Connection to use for the request.
-    # @param [String] end_point The part of the API URL after 'https://api.github.com', including the leading '/'.
-    # @param [Hash] options A Hash of options to be passed down to HTTParty, and additionally +:paginated+ to let us know if we should be retrieving _all_ pages of a paginated result and +:params+ which will be constructed into a query string using OctocatHerder::Base.query_string_from_params.
-    def self.raw_get(conn, end_point, options={})
-      paginated    = options.delete(:paginated)
-      query_params = options.delete(:params) || {}
+    # Since we can't pull both class, and instance methods from the
+    # same module, we put the class methods in their own module.
+    module ClassMethods
+      # This is intended to be used by the various classes
+      # implementing the GitHub API end-points.
+      #
+      # @param [OctocatHerder::Connection] conn An instance of OctocatHerder::Connection to use for the request.
+      # @param [String] end_point The part of the API URL after 'https://api.github.com', including the leading '/'.
+      # @param [Hash] options A Hash of options to be passed down to HTTParty, and additionally +:paginated+ to let us know if we should be retrieving _all_ pages of a paginated result and +:params+ which will be constructed into a query string using OctocatHerder::Base.query_string_from_params.
+      def raw_get(conn, end_point, options={})
+        paginated    = options.delete(:paginated)
+        query_params = options.delete(:params) || {}
 
-      query_params[:per_page] = 100 if paginated and query_params[:per_page].nil?
-      query_string = query_string_from_params(query_params)
+        query_params[:per_page] = 100 if paginated and query_params[:per_page].nil?
+        query_string = query_string_from_params(query_params)
 
-      result = conn.get(end_point + query_string, options)
-      raise "Unable to retrieve #{end_point}" unless result
+        result = conn.get(end_point + query_string, options)
+        raise "Unable to retrieve #{end_point}" unless result
 
-      full_result = result.parsed_response
+        full_result = result.parsed_response
 
-      if paginated
-        if next_page = page_from_headers(result.headers, 'next')
-          query_params[:page] = next_page
+        if paginated
+          if next_page = page_from_headers(result.headers, 'next')
+            query_params[:page] = next_page
 
-          new_options = options.merge(query_params)
-          new_options[:paginated] = true
+            new_options = options.merge(query_params)
+            new_options[:paginated] = true
 
-          full_result += raw_get(conn, end_point, new_options)
+            full_result += raw_get(conn, end_point, new_options)
+          end
         end
+
+        full_result
       end
 
-      full_result
+      # Given the link header as +headers+, and the type of link to
+      # retrieve as +type+, return the page that +type+ links to.
+      #
+      # Possible values for +type+ are:
+      # [next] Shows the URL of the immediate next page of results.
+      # [last] Shows the URL of the last page of results.
+      # [first] Shows the URL of the first page of results.
+      # [prev] Shows the URL of the immediate previous page of results.
+      def page_from_headers(headers, type)
+        link = LinkHeader.parse(headers['link']).find_link(['rel', type])
+        return unless link
+
+        CGI.parse(URI.parse(link.href).query)['page'].first
+      end
+
+      # Convenience method to generate URL query strings.
+      #
+      # [+params+] A Hash of key/values to be turned into a URL query string.  Does not support nested data.
+      def query_string_from_params(params)
+        return '' if params.keys.empty?
+
+        '?' + params.map {|k,v| "#{URI.escape("#{k}")}=#{URI.escape("#{v}")}"}.join('&')
+      end
     end
 
-    # Given the link header as +headers+, and the type of link to
-    # retrieve as +type+, return the page that +type+ links to.
-    #
-    # Possible values for +type+ are:
-    # [next] Shows the URL of the immediate next page of results.
-    # [last] Shows the URL of the last page of results.
-    # [first] Shows the URL of the first page of results.
-    # [prev] Shows the URL of the immediate previous page of results.
-    def self.page_from_headers(headers, type)
-      link = LinkHeader.parse(headers['link']).find_link(['rel', type])
-      return unless link
-
-      CGI.parse(URI.parse(link.href).query)['page'].first
-    end
-
-    # Convenience method to generate URL query strings.
-    #
-    # [+params+] A Hash of key/values to be turned into a URL query string.  Does not support nested data.
-    def self.query_string_from_params(params)
-      return '' if params.keys.empty?
-
-      '?' + params.map {|k,v| "#{URI.escape("#{k}")}=#{URI.escape("#{v}")}"}.join('&')
-    end
+    private
 
     # Intended to be overridden in classes using OctocatHerder::Base,
     # so they can make the methods they define show up in
