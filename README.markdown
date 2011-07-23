@@ -2,7 +2,7 @@
 
 OctocatHerder is a wrapper for the GitHub v3 API.
 
-![Continuous Integration](http://travis-ci.org/jhelwig/octocat_herder.png)
+[Continuous integration](http://travis-ci.org/jhelwig/octocat_herder) ![Build status](http://travis-ci.org/jhelwig/octocat_herder.png)
 
 ## Contributing to octocat-herder
 
