@@ -126,7 +126,7 @@ class OctocatHerder
 
     # Return a real user, instead of a hash with the nested data.
     def merged_by
-      get_detail
+      return nil unless merged
 
       @merged_by ||= OctocatHerder::User.fetch(merged_by_login, connection)
     end
