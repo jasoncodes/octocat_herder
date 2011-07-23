@@ -52,7 +52,7 @@ describe OctocatHerder::Connection do
   it 'raises an ArgumentError if given an OAuth2 Token and a user name and password' do
     expect do
       OctocatHerder::Connection.new :user_name => 'bob', :password => 'pass', :oauth2_token => 'token'
-    end.to raise_error(ArgumentError, 'Cannot provide both an OAuth2 Token, and a user name and password')
+    end.to raise_error(ArgumentError, 'Cannot provide both an OAuth2 token, and a user name and password')
   end
 
   it 'sets the Authorization header when given an OAuth2 Token' do

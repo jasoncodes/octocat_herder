@@ -29,7 +29,7 @@ class OctocatHerder
       end
 
       if options.keys.include?(:oauth2_token) and options.keys.include?(:user_name)
-        raise ArgumentError.new('Cannot provide both an OAuth2 Token, and a user name and password')
+        raise ArgumentError.new('Cannot provide both an OAuth2 token, and a user name and password')
       end
 
       @user_name    = options[:user_name]
