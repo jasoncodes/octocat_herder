@@ -1,6 +1,8 @@
 = octocat_herder
 
-Description goes here.
+OctocatHerder is a wrapper for the GitHub v3 API.
+
+CI[http://travis-ci.org/jhelwig/octocat_herder.png]
 
 == Contributing to octocat-herder
 

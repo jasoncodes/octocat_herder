@@ -2,12 +2,28 @@ require 'httparty'
 require 'link_header'
 
 class OctocatHerder
+  # This implements some additional functionality around HTTParty to
+  # help make working with the GitHub API a little nicer.
   class Connection
     include HTTParty
     base_uri 'https://api.github.com'
 
-    attr_reader :user_name, :password, :oauth2_token
+    # User name to use when doing basic HTTP authentication.
+    attr_reader :user_name
 
+    # Password to use when doing basic HTTP authentication.
+    attr_reader :password
+
+    # The OAuth2 token to use when doing OAuth2 authentication.
+    attr_reader :oauth2_token
+
+    # +options+ is a Hash of the user name and password (provided as
+    # +:user_name+ and +:password+), or the OAuth2 token (provided as
+    # +:oauth2_token+) to use for authenticating with the GitHub v3
+    # API.
+    #
+    # If no hash is provided, then unauthenticated requests will be
+    # made.
     def initialize(options={})
       raise ArgumentError.new(
         "OctocatHerder::Connection does not accept: #{options.class}"
@@ -39,6 +55,8 @@ class OctocatHerder
       end
     end
 
+    # Small wrapper around the standard HTTParty +get+ method, which
+    # handles adding authentication information to the API request.
     def get(end_point, options={})
       request_options = options.merge(httparty_options)
       if httparty_options.has_key?(:headers) and options.has_key(:headers)
