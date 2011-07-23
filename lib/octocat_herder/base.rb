@@ -6,7 +6,7 @@ require 'uri'
 require 'octocat_herder/connection'
 
 class OctocatHerder
-  class Base
+  module Base
     attr_reader :raw, :connection
 
     def initialize(raw_hash, conn = OctocatHerder::Connection.new)

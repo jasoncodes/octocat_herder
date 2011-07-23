@@ -5,7 +5,9 @@ require 'octocat_herder/connection'
 require 'octocat_herder/user'
 
 class OctocatHerder
-  class Repository < Base
+  class Repository
+    include OctocatHerder::Base
+
     def self.method_missing(id, *args)
       if id.id2name =~ /list_(.+)/
         repository_type = Regexp.last_match(1)

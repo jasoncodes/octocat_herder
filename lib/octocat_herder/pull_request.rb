@@ -6,7 +6,9 @@ require 'octocat_herder/user'
 require 'octocat_herder/pull_request/repo'
 
 class OctocatHerder
-  class PullRequest < Base
+  class PullRequest
+    include OctocatHerder::Base
+
     def self.find_for_repository(owner_login, repository_name, status = 'open', conn = OctocatHerder::Connection.new)
       raise ArgumentError.new("Unknown PullRequest status '#{status}'.  Must be one of ['open', 'closed'].") unless
         ['open', 'closed'].include? status

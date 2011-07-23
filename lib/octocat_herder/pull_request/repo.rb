@@ -3,7 +3,7 @@ require 'octocat_herder/user'
 require 'octocat_herder/repository'
 
 class OctocatHerder
-  class PullRequest < Base
+  class PullRequest
     class Repo < ::OctocatHerder::Base
       def user_login
         @raw['user']['login']

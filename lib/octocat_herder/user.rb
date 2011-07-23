@@ -3,7 +3,9 @@ require 'octocat_herder/connection'
 require 'octocat_herder/repository'
 
 class OctocatHerder
-  class User < Base
+  class User
+    include OctocatHerder::Base
+
     def self.fetch(user_name, conn = OctocatHerder::Connection.new)
       user = raw_get(conn, "/users/#{user_name}")
 
