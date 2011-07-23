@@ -97,26 +97,30 @@ class OctocatHerder
 
     # Nested data from the "detail" data.
     def merged_by_login
-      get_detail
+      return nil unless merged
 
+      get_detail
       @raw_detail_hash['merged_by']['login']
     end
 
     def merged_by_id
-      get_detail
+      return nil unless merged
 
+      get_detail
       @raw_detail_hash['merged_by']['id']
     end
 
     def merged_by_avatar_url
-      get_detail
+      return nil unless merged
 
+      get_detail
       @raw_detail_hash['merged_by']['avatar_url']
     end
 
     def merged_by_url
-      get_detail
+      return nil unless merged
 
+      get_detail
       @raw_detail_hash['merged_by']['url']
     end
 
