@@ -29,6 +29,8 @@ class OctocatHerder
         @repo = OctocatHerder::Repository.new(@raw['repo'], connection)
       end
 
+      private
+
       def addtional_attributes
         ['user_login', 'user_id', 'user_avatar_url', 'user_url']
       end

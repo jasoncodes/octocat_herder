@@ -156,18 +156,20 @@ class OctocatHerder
       @base_repo ||= OctocatHerder::PullRequest::Repo.new(@raw_detail_hash['base'], connection)
     end
 
-    def additional_attributes
-      attrs = ['user_avatar_url', 'user_url', 'user_id', 'user_login']
-
-      attrs += @raw_detail_hash.keys if @raw_detail_hash
-      attrs += ['merged_by_login', 'merged_by_id', 'merged_by_avatar_url', 'merged_by_url']
-    end
-
     def to_hash
       raw = @raw || {}
       detail = @raw_detail_hash || {}
 
       raw.merge(detail)
+    end
+
+    private
+
+    def additional_attributes
+      attrs = ['user_avatar_url', 'user_url', 'user_id', 'user_login']
+
+      attrs += @raw_detail_hash.keys if @raw_detail_hash
+      attrs += ['merged_by_login', 'merged_by_id', 'merged_by_avatar_url', 'merged_by_url']
     end
   end
 end
