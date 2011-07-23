@@ -20,9 +20,8 @@ class OctocatHerder
     # by the various class and instance methods that actually make the
     # API requests.
     #
-    # [+raw_hash+] The re-hydrated JSON received from the GitHub API via OctocatHerder::Connection.
-    #
-    # [+conn+] An instance of OctocatHerder::Connection.  Can be left off to make unauthenticated requests.
+    # @param [Hash] raw_hash The re-hydrated JSON received from the GitHub API via OctocatHerder::Connection.
+    # @param [OctocatHerder::Connection] conn If not provided requests will be unauthenticated.
     def initialize(raw_hash, conn = OctocatHerder::Connection.new)
       @connection = conn
       @raw = raw_hash
@@ -41,6 +40,8 @@ class OctocatHerder
 
     # This returns a list of the things that the API request returned
     # to us.
+    #
+    # @return [Array<String>] Names of available methods providing additional detail about the object.
     def available_attributes
       attrs = []
       attrs += @raw.keys.reject do |k|
@@ -58,9 +59,9 @@ class OctocatHerder
     # This is intended to be used by the various classes implementing
     # the GitHub API end-points.
     #
-    # [conn] An instance of OctocatHerder::Connection to use for the request.
-    # [end_point] The part of the API URL after 'https://api.github.com', including the leading '/'.
-    # [options] A Hash of options to be passed down to HTTParty, and additionally +:paginated+ to let us know if we should be retrieving _all_ pages of a paginated result and +:params+ which will be constructed into a query string using OctocatHerder::Base.query_string_from_params.
+    # @param [OctocatHerder::Connection] conn An instance of OctocatHerder::Connection to use for the request.
+    # @param [String] end_point The part of the API URL after 'https://api.github.com', including the leading '/'.
+    # @param [Hash] options A Hash of options to be passed down to HTTParty, and additionally +:paginated+ to let us know if we should be retrieving _all_ pages of a paginated result and +:params+ which will be constructed into a query string using OctocatHerder::Base.query_string_from_params.
     def self.raw_get(conn, end_point, options={})
       paginated    = options.delete(:paginated)
       query_params = options.delete(:params) || {}

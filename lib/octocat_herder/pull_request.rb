@@ -13,13 +13,14 @@ class OctocatHerder
   class PullRequest
     include OctocatHerder::Base
 
-    # Returns a list of OctocatHerder::PullRequest instances
-    # representing the pull requests for a given repository.
+    # Query either the open or closed pull requests for a given
+    # repository.
     #
-    # [owner_login] The login name of the repository owner.
-    # [repository_name] The name of the repository itself.
-    # [status] One of 'open' or 'closed'.  Defaults to querying open pull requests.
-    # [conn] The optional OctocatHerder::Connection to use for API requests.  Defaults to unauthenticated requests.
+    # @param [String] owner_login The login name of the repository owner.
+    # @param [String] repository_name The name of the repository itself.
+    # @param ['open', 'closed'] status Defaults to querying open pull requests.
+    # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
+    # @return [Array<OctocatHerder::PullRequest>] An array of found pull requests.
     def self.find_for_repository(owner_login, repository_name, status = 'open', conn = OctocatHerder::Connection.new)
       raise ArgumentError.new("Unknown PullRequest status '#{status}'.  Must be one of ['open', 'closed'].") unless
         ['open', 'closed'].include? status
@@ -37,33 +38,33 @@ class OctocatHerder
       end
     end
 
-    # Returns a list of OctocatHerder::PullRequest instances
-    # representing the open pull requests for a given repository.
+    # Query the open pull requests for a given repository.
     #
-    # [owner_login] The login name of the repository owner.
-    # [repository_name] The name of the repository itself.
-    # [conn] The optional OctocatHerder::Connection to use for API requests.  Defaults to unauthenticated requests.
+    # @param [String] owner_login The login name of the repository owner.
+    # @param [String] repository_name The name of the repository itself.
+    # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
+    # @return [Array<OctocatHerder::PullRequest>] An array of found pull requests.
     def self.find_open_for_repository(owner_login, repository_name, conn = OctocatHerder::Connection.new)
       OctocatHerder::PullRequest.find_for_repository(owner_login, repository_name, 'open', conn)
     end
 
-    # Returns a list of OctocatHerder::PullRequest instances
-    # representing the closed pull requests for a given repository.
+    # Query the closed pull requests for a given repository.
     #
-    # [owner_login] The login name of the repository owner.
-    # [repository_name] The name of the repository itself.
-    # [conn] The optional OctocatHerder::Connection to use for API requests.  Defaults to unauthenticated requests.
+    # @param [String] owner_login The login name of the repository owner.
+    # @param [String] repository_name The name of the repository itself.
+    # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
+    # @return [Array<OctocatHerder::PullRequest>] An array of found pull requests.
     def self.find_closed_for_repository(owner_login, repository_name, conn = OctocatHerder::Connection.new)
       OctocatHerder::PullRequest.find_for_repository(owner_login, repository_name, 'closed', conn)
     end
 
-    # Returns a single OctocatHerder::PullRequest instance
-    # representing the given pull request.
+    # Query information about a specific pull request.
     #
-    # [owner_login] The login name of the repository owner.
-    # [repository_name] The name of the repository itself.
-    # [pull_request_number] The pull request to retrieve.
-    # [conn] The optional OctocatHerder::Connection to use for API requests.  Defaults to unauthenticated requests.
+    # @param [String] owner_login The login name of the repository owner.
+    # @param [String] repository_name The name of the repository itself.
+    # @param [String, Integer] pull_request_number The pull request to retrieve.
+    # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
+    # @return [OctocatHerder::PullRequest]
     def self.fetch(owner_login, repository_name, pull_request_number, conn = OctocatHerder::Connection.new)
       request = raw_get(
         conn,
@@ -74,11 +75,11 @@ class OctocatHerder
       new(nil, request, conn)
     end
 
-    # Not intended for public consumption.
+    # @note Not intended for public consumption.
     #
-    # [raw_hash] The 'overview' information retrieved from the pull request listing API.
-    # [raw_detail_hash] The full information available by querying information about a specific pull request.
-    # [conn] The OctocatHerder::Connection instance to use for querying the API.  Defaults to unauthenticated requests.
+    # @param [Hash] raw_hash The 'overview' information retrieved from the pull request listing API.
+    # @param [Hash] raw_detail_hash The full information available by querying information about a specific pull request.
+    # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
     def initialize(raw_hash, raw_detail_hash = nil, conn = OctocatHerder::Connection.new)
       super raw_hash, conn
       @raw_detail_hash = raw_detail_hash
@@ -90,6 +91,8 @@ class OctocatHerder
     # request are available since GitHub doesn't return them in the
     # listing.  This will query information about the specific pull
     # request, which will get us all of the available details.
+    #
+    # @return [self]
     def get_detail
       return if @raw_detail_hash
 
@@ -104,6 +107,8 @@ class OctocatHerder
     # Check the "normal" place first for the information returned by
     # the GitHub API, then check +@raw_detail_hash+ (populating it if
     # needed).
+    #
+    # @return [String]
     def method_missing(id, *args)
       super
     rescue NoMethodError => e
@@ -115,8 +120,9 @@ class OctocatHerder
 
     # The URL to the avatar image of the person that opened the pull request.
     #
-    # Since this is returned by the pull request API itself, this can
-    # be used without making an additional API request.
+    # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
+    #
+    # @return [String] Avatar URL
     def user_avatar_url
       return @raw['user']['avatar_url'] if @raw
       @raw_detail_hash['user']['avatar_url']
@@ -124,8 +130,9 @@ class OctocatHerder
 
     # The URL of the person that opened the pull request.
     #
-    # Since this is returned by the pull request API itself, this can
-    # be used without making an additional API request.
+    # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
+    #
+    # @return [String] User URL
     def user_url
       return @raw['user']['url'] if @raw
       @raw_detail_hash['user']['url']
@@ -133,8 +140,9 @@ class OctocatHerder
 
     # The ID number of the person that opened the pull request.
     #
-    # Since this is returned by the pull request API itself, this can
-    # be used without making an additional API request.
+    # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
+    #
+    # @return [Integer] User ID
     def user_id
       return @raw['user']['id'] if @raw
       @raw_detail_hash['user']['id']
@@ -142,24 +150,27 @@ class OctocatHerder
 
     # The login name of the person that opened the pull request.
     #
-    # Since this is returned by the pull request API itself, this can
-    # be used without making an additional API request.
+    # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
+    #
+    # @return [String] User login name
     def user_login
       return @raw['user']['login'] if @raw
       @raw_detail_hash['user']['login']
     end
 
-    # Return an OctocatHerder::User representing the user that opened
-    # the pull request.
+    # The user that opened the pull request.
     #
-    # This is cached locally to the individual pull request, but will
-    # make an additional API request to populate it initially.
+    # @note This is cached locally to the individual pull request, but will make an additional API request to populate it initially.
+    #
+    # @return [OctocatHerder::User]
     def user
       @user ||= OctocatHerder::User.fetch(user_login, connection)
     end
 
     # The login name of the person that merged the pull request, or
     # +nil+ if it has not been merged yet.
+    #
+    # @return [String, nil]
     def merged_by_login
       return nil unless merged
 
@@ -169,6 +180,8 @@ class OctocatHerder
 
     # The ID number of the person that merged the pull request, or
     # +nil+ if it has not been merged yet.
+    #
+    # @return [String, nil]
     def merged_by_id
       return nil unless merged
 
@@ -178,6 +191,8 @@ class OctocatHerder
 
     # The URL to the avatar image of the person that merged the pull
     # request, or +nil+ if it has not been merged yet.
+    #
+    # @return [String, nil]
     def merged_by_avatar_url
       return nil unless merged
 
@@ -187,6 +202,8 @@ class OctocatHerder
 
     # The URL of the person that merged the pull request, or +nil+ if
     # it has not been merged yet.
+    #
+    # @return [String, nil]
     def merged_by_url
       return nil unless merged
 
@@ -194,49 +211,60 @@ class OctocatHerder
       @raw_detail_hash['merged_by']['url']
     end
 
-    # Return an OctocatHerder::User representing the user that merged
-    # the pull request, or +nil+ if it has not been merged yet.
+    # The user that merged the pull request, or +nil+ if it has not
+    # been merged yet.
     #
-    # This is cached locally to the individual pull request, but will
-    # make an additional API request to populate it initially.
+    # @note This is cached locally to the individual pull request, but will make an additional API request to populate it initially.
+    #
+    # @return [OctocatHerder::User, nil]
     def merged_by
       return nil unless merged
 
       @merged_by ||= OctocatHerder::User.fetch(merged_by_login, connection)
     end
 
-    # When the pull request was first created as a Ruby Time object.
+    # When the pull request was first created.
+    #
+    # @return [Time]
     def created_at
       parse_date_time(@raw_detail_hash['created_at'])
     end
 
-    # When the pull request was last updated as a Ruby Time object.
+    # When the pull request was last updated.
+    #
+    # @return [Time]
     def updated_at
       parse_date_time(@raw_detail_hash['updated_at'])
     end
 
-    # When the pull request was closed as a Ruby Time object.
+    # When the pull request was closed, or +nil+ if it is still open.
+    #
+    # @return [Time, nil]
     def closed_at
       parse_date_time(@raw_detail_hash['closed_at'])
     end
 
-    # When the pull request was merged as a Ruby Time object.
+    # When the pull request was merged, or +nil+ if it hasn't been merged.
+    #
+    # @return [Time, nil]
     def merged_at
       parse_date_time(@raw_detail_hash['merged_at'])
     end
 
-    # Returns an OctocatHerder::PullRequest::Repo representing
-    # information about what is being asked to be merged in the pull
+    # Information about what is being asked to be merged in the pull
     # request.
+    #
+    # @return [OctocatHerder::PullRequest::Repo]
     def head
       get_detail
 
       @head_repo ||= OctocatHerder::PullRequest::Repo.new(@raw_detail_hash['head'], connection)
     end
 
-    # Returns an OctocatHerder::PullRequest::Repo representing
-    # information about what the pull request was based on in the pull
+    # Information about what the pull request was based on in the pull
     # request.
+    #
+    # @return [OctocatHerder::PullRequest::Repo]
     def base
       get_detail
 
@@ -245,6 +273,8 @@ class OctocatHerder
 
     # A Hash representation of the pull request.  Combines +@raw+, and
     # +@raw_detail_hash+ into a single hash.
+    #
+    # @return [Hash]
     def to_hash
       raw = @raw || {}
       detail = @raw_detail_hash || {}

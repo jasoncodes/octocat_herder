@@ -10,37 +10,45 @@ class OctocatHerder
     # OctocatHerder::PullRequest#base.
     class Repo < ::OctocatHerder::Base
       # The login name of the owner of this repository.
+      #
+      # @return [String]
       def user_login
         @raw['user']['login']
       end
 
       # The ID number of the owner of this repository.
+      #
+      # @return [Integer]
       def user_id
         @raw['user']['id']
       end
 
       # The URL to the avatar image of the owner of this repository.
+      #
+      # @return [String]
       def user_avatar_url
         @raw['user']['avatar_url']
       end
 
       # The URL of the owner of this repository.
+      #
+      # @return [String]
       def user_url
         @raw['user']['url']
       end
 
-      # Return an OctocatHerder::User representing the owner of this
-      # repository.
+      # The owner of this repository.
       #
-      # This is cached locally to the instance of
-      # OctocatHerder::PullRequest::Repo, but will make an additional
-      # API request to populate it initially.
+      # @note This is cached locally to the instance of OctocatHerder::PullRequest::Repo, but will make an additional API request to populate it initially.
+      #
+      # @return [OctocatHerder::User]
       def user
         @user ||= OctocatHerder::User.fetch(@raw['user'], connection)
       end
 
-      # Return an OctocatHerder::Repository representing the detailed
-      # information about the repository.
+      # The detailed information about the repository.
+      #
+      # @return [OctocatHerder::Repository]
       def repo
         @repo ||= OctocatHerder::Repository.new(@raw['repo'], connection)
       end

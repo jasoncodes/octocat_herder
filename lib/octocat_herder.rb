@@ -13,15 +13,17 @@ class OctocatHerder
   # requests.
   attr_reader :connection
 
-  # +options+ will be passed to OctocatHerder::Connection.new when
-  # constructing the OctocatHerder::Connection used for making API
-  # requests.
+  # Get a new OctocatHerder for use with the GitHub v3 API.
+  #
+  # @param [Hash] options Passed to OctocatHerder::Connection.new
   def initialize(options={})
     @connection = OctocatHerder::Connection.new(options)
   end
 
   # Fetch an OctocatHerder::User by using OctocatHerder::User.fetch
   # and the OctocatHerder::Connection from #connection
+  #
+  # @param [String] user_name The login name of the GitHub user to retrieve.
   def user(user_name)
     OctocatHerder::User.fetch(user_name, connection)
   end

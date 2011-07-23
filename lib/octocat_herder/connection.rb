@@ -17,13 +17,17 @@ class OctocatHerder
     # The OAuth2 token to use when doing OAuth2 authentication.
     attr_reader :oauth2_token
 
-    # +options+ is a Hash of the user name and password (provided as
-    # +:user_name+ and +:password+), or the OAuth2 token (provided as
-    # +:oauth2_token+) to use for authenticating with the GitHub v3
-    # API.
+    # If provided a hash of login information, the Connection will attempt to make authenticated requests.
+    #
+    # Login information can be provided as
+    #   :user_name => 'user', :password => 'pass'
+    # or
+    #   :oauth2_token => 'token'
     #
     # If no hash is provided, then unauthenticated requests will be
     # made.
+    #
+    # @param [Hash<Symbol => String>] options Login information
     def initialize(options={})
       raise ArgumentError.new(
         "OctocatHerder::Connection does not accept: #{options.class}"
