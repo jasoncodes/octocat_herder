@@ -8,10 +8,6 @@ class OctocatHerder
 
     attr_reader :user_name, :password, :oauth2_token
 
-    def httparty_options
-      @httparty_options || {}
-    end
-
     def initialize(options={})
       raise ArgumentError.new(
         "OctocatHerder::Connection does not accept: #{options.class}"
@@ -50,6 +46,12 @@ class OctocatHerder
       end
 
       OctocatHerder::Connection.get(end_point, request_options)
+    end
+
+    private
+
+    def httparty_options
+      @httparty_options || {}
     end
   end
 end

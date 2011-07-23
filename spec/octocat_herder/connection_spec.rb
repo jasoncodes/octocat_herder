@@ -58,18 +58,18 @@ describe OctocatHerder::Connection do
   it 'sets the Authorization header when given an OAuth2 Token' do
     conn = OctocatHerder::Connection.new :oauth2_token => 'my_token'
 
-    conn.httparty_options.should == { :headers => { 'Authorization' => 'token my_token' } }
+    conn.send(:httparty_options).should == { :headers => { 'Authorization' => 'token my_token' } }
   end
 
   it 'uses basic auth when given a user name and password' do
     conn = OctocatHerder::Connection.new :user_name => 'user', :password => 'pass'
 
-    conn.httparty_options.should == { :basic_auth => { :username => 'user', :password => 'pass' } }
+    conn.send(:httparty_options).should == { :basic_auth => { :username => 'user', :password => 'pass' } }
   end
 
   it 'should not set any additional options when making unauthenticated requests' do
     conn = OctocatHerder::Connection.new
 
-    conn.httparty_options.should == {}
+    conn.send(:httparty_options).should == {}
   end
 end
