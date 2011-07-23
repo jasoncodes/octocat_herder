@@ -39,7 +39,7 @@ class OctocatHerder
     end
 
     def owner
-      OctocatHerder::User.fetch(owner_login, connection)
+      @owner ||= OctocatHerder::User.fetch(owner_login, connection)
     end
 
     def open_pull_requests
