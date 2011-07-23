@@ -43,11 +43,11 @@ class OctocatHerder
     end
 
     def open_pull_requests
-      OctocatHerder::PullRequest.find_for_repository(owner_login, name, 'open')
+      OctocatHerder::PullRequest.find_open_for_repository(owner_login, name, connection)
     end
 
     def closed_pull_requests
-      OctocatHerder::PullRequest.find_for_repository(owner_login, name, 'closed')
+      OctocatHerder::PullRequest.find_closed_for_repository(owner_login, name, connection)
     end
 
     def source
