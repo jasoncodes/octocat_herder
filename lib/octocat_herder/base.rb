@@ -1,6 +1,11 @@
 require 'cgi'
 require 'link_header'
-require 'parsedate'
+
+begin
+  require 'parsedate'
+rescue LoadError
+end
+
 require 'uri'
 
 require 'octocat_herder/connection'
@@ -132,7 +137,11 @@ class OctocatHerder
     def parse_date_time(date_time)
       return nil unless date_time
 
-      Time.utc(*ParseDate.parsedate(date_time))
+      if defined? ParseDate
+        Time.utc(*ParseDate.parsedate(date_time))
+      else
+        DateTime.parse date_time
+      end
     end
   end
 end
