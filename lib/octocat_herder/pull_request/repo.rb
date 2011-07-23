@@ -8,7 +8,9 @@ class OctocatHerder
     # pull request API.  This is only ever useful when returned from
     # OctocatHerder::PullRequest#head or
     # OctocatHerder::PullRequest#base.
-    class Repo < ::OctocatHerder::Base
+    class Repo
+      include OctocatHerder::Base
+
       # The login name of the owner of this repository.
       #
       # @return [String]
