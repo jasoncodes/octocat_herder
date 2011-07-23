@@ -22,11 +22,11 @@ class OctocatHerder
       end
 
       def user
-        @user = OctocatHerder::User.fetch(@raw['user'], connection)
+        @user ||= OctocatHerder::User.fetch(@raw['user'], connection)
       end
 
       def repo
-        @repo = OctocatHerder::Repository.new(@raw['repo'], connection)
+        @repo ||= OctocatHerder::Repository.new(@raw['repo'], connection)
       end
 
       private
