@@ -16,6 +16,7 @@ class OctocatHerder
     # Query either the open or closed pull requests for a given
     # repository.
     #
+    # @since 0.0.1
     # @param [String] owner_login The login name of the repository owner.
     # @param [String] repository_name The name of the repository itself.
     # @param ['open', 'closed'] status Defaults to querying open pull requests.
@@ -40,6 +41,7 @@ class OctocatHerder
 
     # Query the open pull requests for a given repository.
     #
+    # @since 0.0.1
     # @param [String] owner_login The login name of the repository owner.
     # @param [String] repository_name The name of the repository itself.
     # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
@@ -50,6 +52,7 @@ class OctocatHerder
 
     # Query the closed pull requests for a given repository.
     #
+    # @since 0.0.1
     # @param [String] owner_login The login name of the repository owner.
     # @param [String] repository_name The name of the repository itself.
     # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
@@ -60,6 +63,7 @@ class OctocatHerder
 
     # Query information about a specific pull request.
     #
+    # @since 0.0.1
     # @param [String] owner_login The login name of the repository owner.
     # @param [String] repository_name The name of the repository itself.
     # @param [String, Integer] pull_request_number The pull request to retrieve.
@@ -75,8 +79,8 @@ class OctocatHerder
       new(nil, request, conn)
     end
 
-    # @note Not intended for public consumption.
-    #
+    # @api private
+    # @since 0.0.1
     # @param [Hash] raw_hash The 'overview' information retrieved from the pull request listing API.
     # @param [Hash] raw_detail_hash The full information available by querying information about a specific pull request.
     # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
@@ -92,6 +96,7 @@ class OctocatHerder
     # listing.  This will query information about the specific pull
     # request, which will get us all of the available details.
     #
+    # @since 0.0.1
     # @return [self]
     def get_detail
       return if @raw_detail_hash
@@ -108,6 +113,7 @@ class OctocatHerder
     # the GitHub API, then check +@raw_detail_hash+ (populating it if
     # needed).
     #
+    # @since 0.0.1
     # @return [String]
     def method_missing(id, *args)
       super
@@ -122,6 +128,7 @@ class OctocatHerder
     #
     # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
     #
+    # @since 0.0.1
     # @return [String] Avatar URL
     def user_avatar_url
       return @raw['user']['avatar_url'] if @raw
@@ -132,6 +139,7 @@ class OctocatHerder
     #
     # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
     #
+    # @since 0.0.1
     # @return [String] User URL
     def user_url
       return @raw['user']['url'] if @raw
@@ -142,6 +150,7 @@ class OctocatHerder
     #
     # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
     #
+    # @since 0.0.1
     # @return [Integer] User ID
     def user_id
       return @raw['user']['id'] if @raw
@@ -152,6 +161,7 @@ class OctocatHerder
     #
     # @note Since this is returned by the pull request API itself, this can be used without making an additional API request.
     #
+    # @since 0.0.1
     # @return [String] User login name
     def user_login
       return @raw['user']['login'] if @raw
@@ -162,6 +172,7 @@ class OctocatHerder
     #
     # @note This is cached locally to the individual pull request, but will make an additional API request to populate it initially.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::User]
     def user
       @user ||= OctocatHerder::User.fetch(user_login, connection)
@@ -170,6 +181,7 @@ class OctocatHerder
     # The login name of the person that merged the pull request, or
     # +nil+ if it has not been merged yet.
     #
+    # @since 0.0.1
     # @return [String, nil]
     def merged_by_login
       return nil unless merged
@@ -181,6 +193,7 @@ class OctocatHerder
     # The ID number of the person that merged the pull request, or
     # +nil+ if it has not been merged yet.
     #
+    # @since 0.0.1
     # @return [String, nil]
     def merged_by_id
       return nil unless merged
@@ -192,6 +205,7 @@ class OctocatHerder
     # The URL to the avatar image of the person that merged the pull
     # request, or +nil+ if it has not been merged yet.
     #
+    # @since 0.0.1
     # @return [String, nil]
     def merged_by_avatar_url
       return nil unless merged
@@ -203,6 +217,7 @@ class OctocatHerder
     # The URL of the person that merged the pull request, or +nil+ if
     # it has not been merged yet.
     #
+    # @since 0.0.1
     # @return [String, nil]
     def merged_by_url
       return nil unless merged
@@ -216,6 +231,7 @@ class OctocatHerder
     #
     # @note This is cached locally to the individual pull request, but will make an additional API request to populate it initially.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::User, nil]
     def merged_by
       return nil unless merged
@@ -225,6 +241,7 @@ class OctocatHerder
 
     # When the pull request was first created.
     #
+    # @since 0.0.1
     # @return [Time]
     def created_at
       parse_date_time(@raw_detail_hash['created_at'])
@@ -232,6 +249,7 @@ class OctocatHerder
 
     # When the pull request was last updated.
     #
+    # @since 0.0.1
     # @return [Time]
     def updated_at
       parse_date_time(@raw_detail_hash['updated_at'])
@@ -239,6 +257,7 @@ class OctocatHerder
 
     # When the pull request was closed, or +nil+ if it is still open.
     #
+    # @since 0.0.1
     # @return [Time, nil]
     def closed_at
       parse_date_time(@raw_detail_hash['closed_at'])
@@ -246,6 +265,7 @@ class OctocatHerder
 
     # When the pull request was merged, or +nil+ if it hasn't been merged.
     #
+    # @since 0.0.1
     # @return [Time, nil]
     def merged_at
       parse_date_time(@raw_detail_hash['merged_at'])
@@ -254,6 +274,7 @@ class OctocatHerder
     # Information about what is being asked to be merged in the pull
     # request.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::PullRequest::Repo]
     def head
       get_detail
@@ -264,6 +285,7 @@ class OctocatHerder
     # Information about what the pull request was based on in the pull
     # request.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::PullRequest::Repo]
     def base
       get_detail
@@ -274,6 +296,7 @@ class OctocatHerder
     # A Hash representation of the pull request.  Combines +@raw+, and
     # +@raw_detail_hash+ into a single hash.
     #
+    # @since 0.0.2
     # @return [Hash]
     def to_hash
       raw = @raw || {}
@@ -287,6 +310,9 @@ class OctocatHerder
     # Give a full listing of the available information, since we
     # define some of our own methods, and don't have everything in
     # +@raw+.
+    #
+    # @api private
+    # @since 0.0.1
     def additional_attributes
       attrs = ['user_avatar_url', 'user_url', 'user_id', 'user_login']
 

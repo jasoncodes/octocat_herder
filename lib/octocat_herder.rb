@@ -11,10 +11,14 @@ require 'octocat_herder/user'
 class OctocatHerder
   # The instance of OctocatHerder::Connection used for making API
   # requests.
+  #
+  # @since 0.0.1
   attr_reader :connection
 
   # Get a new OctocatHerder for use with the GitHub v3 API.
   #
+  # @since 0.0.1
+  # @see OctocatHerder::Connection.new
   # @param [Hash] options Passed to OctocatHerder::Connection.new
   def initialize(options={})
     @connection = OctocatHerder::Connection.new(options)
@@ -23,6 +27,7 @@ class OctocatHerder
   # Fetch an OctocatHerder::User by using OctocatHerder::User.fetch
   # and the OctocatHerder::Connection from #connection
   #
+  # @since 0.0.1
   # @param [String] user_name The login name of the GitHub user to retrieve.
   def user(user_name)
     OctocatHerder::User.fetch(user_name, connection)

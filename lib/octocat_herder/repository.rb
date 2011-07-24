@@ -18,6 +18,7 @@ class OctocatHerder
     # user login name, and an optional OctocatHerder::Connection to
     # use.
     #
+    # @since 0.0.1
     # @return [Array<OctocatHerder::Repository>]
     def self.method_missing(id, *args)
       if id.id2name =~ /list_(.+)/
@@ -35,6 +36,7 @@ class OctocatHerder
 
     # The login name of the owner of the repository.
     #
+    # @since 0.0.1
     # @return [String]
     def owner_login
       @raw['owner']['login']
@@ -42,6 +44,7 @@ class OctocatHerder
 
     # The ID number of the owner of the repository.
     #
+    # @since 0.0.1
     # @return [Integer]
     def owner_id
       @raw['owner']['id']
@@ -49,6 +52,7 @@ class OctocatHerder
 
     # The URL to the avatar image of the owner of the repository.
     #
+    # @since 0.0.1
     # @return [String]
     def owner_avatar_url
       @raw['owner']['avatar_url']
@@ -56,6 +60,7 @@ class OctocatHerder
 
     # The URL of the owner of the repository.
     #
+    # @since 0.0.1
     # @return [String]
     def owner_url
       @raw['owner']['url']
@@ -65,6 +70,7 @@ class OctocatHerder
     #
     # @note This is cached locally to the instance of OctocatHerder::Repository, but will make an additional API request to populate it initially.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::User]
     def owner
       @owner ||= OctocatHerder::User.fetch(owner_login, connection)
@@ -74,6 +80,7 @@ class OctocatHerder
     #
     # @note This is _not_ cached, and will make at least one API request every time it is called.
     #
+    # @since 0.0.1
     # @return [Array<OctocatHerder::PullRequest>]
     def open_pull_requests
       OctocatHerder::PullRequest.find_open_for_repository(owner_login, name, connection)
@@ -83,6 +90,7 @@ class OctocatHerder
     #
     # @note This is _not_ cached, and will make at least one API request every time it is called.
     #
+    # @since 0.0.1
     # @return [Array<OctocatHerder::PullRequest>]
     def closed_pull_requests
       OctocatHerder::PullRequest.find_closed_for_repository(owner_login, name, connection)
@@ -91,6 +99,7 @@ class OctocatHerder
     # The source repository that this one was forked from, or +nil+ if
     # this repository is not a fork.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::Repository, nil]
     def source
       return nil unless @raw['source']

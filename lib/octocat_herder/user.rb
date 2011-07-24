@@ -10,6 +10,9 @@ class OctocatHerder
   class User
     include OctocatHerder::Base
 
+    # Find a user by login name
+    #
+    # @since 0.0.1
     # @param [String] user_name The login name of the desired user.
     # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
     # @return [OctocatHerder::User]
@@ -23,6 +26,7 @@ class OctocatHerder
     #
     # @note This is cached locally to the OctocatHerder::User instance, but at least one API request will be made to populate it initially.
     #
+    # @since 0.0.1
     # @return [Array<OctocatHerder::Repository>]
     def repositories
       @repositories ||= OctocatHerder::Repository.list_all(login, user_type, connection)
@@ -30,6 +34,7 @@ class OctocatHerder
 
     # The ID number of the user.
     #
+    # @since 0.0.1
     # @return [Integer]
     def user_id
       # The user id can't be handled by the method_missing magic from
@@ -40,6 +45,7 @@ class OctocatHerder
 
     # The type of account.  Typically one of 'User', or 'Organization'
     #
+    # @since 0.0.1
     # @return [String]
     def user_type
       # The user type can't be handled by the method_missing magic
@@ -50,6 +56,8 @@ class OctocatHerder
 
     private
 
+    # @api private
+    # @since 0.0.1
     def additional_attributes
       ['user_id', 'user_type']
     end

@@ -9,12 +9,18 @@ class OctocatHerder
     base_uri 'https://api.github.com'
 
     # User name to use when doing basic HTTP authentication.
+    #
+    # @since 0.0.1
     attr_reader :user_name
 
     # Password to use when doing basic HTTP authentication.
+    #
+    # @since 0.0.1
     attr_reader :password
 
     # The OAuth2 token to use when doing OAuth2 authentication.
+    #
+    # @since 0.0.1
     attr_reader :oauth2_token
 
     # If provided a hash of login information, the Connection will attempt to make authenticated requests.
@@ -27,7 +33,11 @@ class OctocatHerder
     # If no hash is provided, then unauthenticated requests will be
     # made.
     #
+    # @since 0.0.1
     # @param [Hash<Symbol => String>] options Login information
+    # @option options [String] :user_name
+    # @option options [String] :password
+    # @option options [String] :oauth2_token
     def initialize(options={})
       raise ArgumentError.new(
         "OctocatHerder::Connection does not accept: #{options.class}"
@@ -61,6 +71,8 @@ class OctocatHerder
 
     # Small wrapper around the standard HTTParty +get+ method, which
     # handles adding authentication information to the API request.
+    #
+    # @since 0.0.1
     def get(end_point, options={})
       request_options = options.merge(httparty_options)
       if httparty_options.has_key?(:headers) and options.has_key(:headers)

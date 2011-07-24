@@ -16,19 +16,19 @@ class OctocatHerder
   module Base
     # The re-hydrated JSON retrieved from the GitHub API.
     #
+    # @since 0.0.1
     # @return [Hash]
     attr_reader :raw
 
     # Our OctocatHerder::Connection, so we can make more requests
     # based on the information we retrieved from the GitHub API.
     #
+    # @since 0.0.1
     # @return [OctocatHerder::Connection]
     attr_reader :connection
 
-    # This isn't meant to be consumed publicly.  It's meant to be used
-    # by the various class and instance methods that actually make the
-    # API requests.
-    #
+    # @api private
+    # @since 0.0.1
     # @param [Hash] raw_hash The re-hydrated JSON received from the GitHub API via OctocatHerder::Connection.
     # @param [OctocatHerder::Connection] conn If not provided requests will be unauthenticated.
     def initialize(raw_hash, conn = OctocatHerder::Connection.new)
@@ -39,6 +39,8 @@ class OctocatHerder
     # We use the +method_missing+ magic to create accessors for the
     # information we got back from the GitHub API.  You can get a list
     # of all of the available things from #available_attributes.
+    #
+    # @since 0.0.1
     def method_missing(id, *args)
       unless @raw and @raw.keys.include?(id.id2name)
         raise NoMethodError.new("undefined method #{id.id2name} for #{self}:#{self.class}")
@@ -50,6 +52,7 @@ class OctocatHerder
     # This returns a list of the things that the API request returned
     # to us.
     #
+    # @since 0.0.1
     # @return [Array<String>] Names of available methods providing additional detail about the object.
     def available_attributes
       attrs = []
@@ -77,6 +80,7 @@ class OctocatHerder
       # This is intended to be used by the various classes
       # implementing the GitHub API end-points.
       #
+      # @since development
       # @param [OctocatHerder::Connection] conn An instance of OctocatHerder::Connection to use for the request.
       # @param [String] end_point The part of the API URL after 'https://api.github.com', including the leading '/'.
       # @param [Hash] options A Hash of options to be passed down to HTTParty, and additionally +:paginated+ to let us know if we should be retrieving _all_ pages of a paginated result and +:params+ which will be constructed into a query string using OctocatHerder::Base.query_string_from_params.
@@ -115,6 +119,7 @@ class OctocatHerder
       # [first] The first page of results.
       # [prev] The immediate previous page of results.
       #
+      # @since development
       # @param [Hash] headers
       # @param ['next', 'last', 'first', 'prev] type
       def page_from_headers(headers, type)
@@ -126,7 +131,8 @@ class OctocatHerder
 
       # Convenience method to generate URL query strings.
       #
-      # [+params+] A Hash of key/values to be turned into a URL query string.  Does not support nested data.
+      # @since development
+      # @param [Hash] params A Hash of key/values to be turned into a URL query string.  Does not support nested data.
       def query_string_from_params(params)
         return '' if params.keys.empty?
 
@@ -139,10 +145,13 @@ class OctocatHerder
     # Intended to be overridden in classes using OctocatHerder::Base,
     # so they can make the methods they define show up in
     # #available_attributes.
+    #
+    # @since 0.0.1
     def additional_attributes
       []
     end
 
+    # @since 0.0.1
     def parse_date_time(date_time)
       return nil unless date_time
 
