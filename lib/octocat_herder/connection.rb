@@ -124,6 +124,14 @@ class OctocatHerder
       OctocatHerder::Connection.get(end_point + query_string, request_options)
     end
 
+    # Are we making authenticated requests?
+    #
+    # @since development
+    # @return [true, false]
+    def authenticated_requests?
+      (user_name and password) or oauth2_token
+    end
+
     # Retrieve the page number of a given 'Link:' header from a hash
     # of HTTP Headers
     #
