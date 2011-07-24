@@ -146,10 +146,10 @@ class OctocatHerder
     # of HTTP Headers
     #
     # +type+ can be one of:
-    # [+'next'+] The immediate next page of results.
-    # [+'last'+] The last page of results.
-    # [+'first'+] The first page of results.
-    # [+'prev'+] The immediate previous page of results.
+    # ['+next+'] The immediate next page of results.
+    # ['+last+'] The last page of first.
+    # ['+first+'] The first page of results.
+    # ['+prev+'] The immediate previous page of results.
     #
     # @since development
     #
@@ -157,7 +157,7 @@ class OctocatHerder
     #
     # @param [Hash] headers
     #
-    # @param ['next', 'last', 'first', 'prev] type
+    # @param ['next', 'last', 'first', 'prev'] type
     def page_from_headers(headers, type)
       raise ArgumentError.new(
         "Unknown type: #{type}"
