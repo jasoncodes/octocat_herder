@@ -180,6 +180,18 @@ class OctocatHerder
       end
     end
 
+    # Fetch a single repository.
+    #
+    # @since 0.0.1
+    #
+    # @param [String] login Login name of the account.
+    #
+    # @param [String] repository_name Name of the repository.
+    #
+    # @param [OctocatHerder::Connection] Default to unauthenticated
+    #   requests.
+    #
+    # @return [OctocatHerder::Repository]
     def self.fetch(login, repository_name, conn = OctocatHerder::Connection.new)
       repo_data = conn.get(
         "/repos/#{CGI.escape(login)}/#{CGI.escape(repository_name)}"
