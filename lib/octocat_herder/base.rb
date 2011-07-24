@@ -15,10 +15,14 @@ class OctocatHerder
   # GitHub v3 API.
   module Base
     # The re-hydrated JSON retrieved from the GitHub API.
+    #
+    # @return [Hash]
     attr_reader :raw
 
     # Our OctocatHerder::Connection, so we can make more requests
     # based on the information we retrieved from the GitHub API.
+    #
+    # @return [OctocatHerder::Connection]
     attr_reader :connection
 
     # This isn't meant to be consumed publicly.  It's meant to be used
@@ -68,6 +72,8 @@ class OctocatHerder
     # Since we can't pull both class, and instance methods from the
     # same module, we put the class methods in their own module.
     module ClassMethods
+      private
+
       # This is intended to be used by the various classes
       # implementing the GitHub API end-points.
       #
@@ -100,14 +106,17 @@ class OctocatHerder
         full_result
       end
 
-      # Given the link header as +headers+, and the type of link to
-      # retrieve as +type+, return the page that +type+ links to.
+      # Retrieve the page number of a given 'Link:' header from a hash
+      # of HTTP Headers
       #
-      # Possible values for +type+ are:
-      # [next] Shows the URL of the immediate next page of results.
-      # [last] Shows the URL of the last page of results.
-      # [first] Shows the URL of the first page of results.
-      # [prev] Shows the URL of the immediate previous page of results.
+      # +type+ can be one of:
+      # [next] The immediate next page of results.
+      # [last] The last page of results.
+      # [first] The first page of results.
+      # [prev] The immediate previous page of results.
+      #
+      # @param [Hash] headers
+      # @param ['next', 'last', 'first', 'prev] type
       def page_from_headers(headers, type)
         link = LinkHeader.parse(headers['link']).find_link(['rel', type])
         return unless link
