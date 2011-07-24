@@ -20,7 +20,7 @@ class OctocatHerder
     # @return [Hash]
     attr_reader :raw
 
-    # Our OctocatHerder::Connection, so we can make more requests
+    # Our {OctocatHerder::Connection}, so we can make more requests
     # based on the information we retrieved from the GitHub API.
     #
     # @since 0.0.1
@@ -29,8 +29,12 @@ class OctocatHerder
 
     # @api private
     # @since 0.0.1
-    # @param [Hash] raw_hash The re-hydrated JSON received from the GitHub API via OctocatHerder::Connection.
-    # @param [OctocatHerder::Connection] conn If not provided requests will be unauthenticated.
+    #
+    # @param [Hash] raw_hash The re-hydrated JSON received from the
+    #   GitHub API via {OctocatHerder::Connection}.
+    #
+    # @param [OctocatHerder::Connection] conn If not provided requests
+    #   will be unauthenticated.
     def initialize(raw_hash, conn = OctocatHerder::Connection.new)
       @connection = conn
       @raw = raw_hash
@@ -38,7 +42,7 @@ class OctocatHerder
 
     # We use the +method_missing+ magic to create accessors for the
     # information we got back from the GitHub API.  You can get a list
-    # of all of the available things from #available_attributes.
+    # of all of the available things from {#available_attributes}.
     #
     # @since 0.0.1
     def method_missing(id, *args)
@@ -53,7 +57,9 @@ class OctocatHerder
     # to us.
     #
     # @since 0.0.1
-    # @return [Array<String>] Names of available methods providing additional detail about the object.
+    #
+    # @return [Array<String>] Names of available methods providing
+    #   additional detail about the object.
     def available_attributes
       attrs = []
       attrs += @raw.keys.reject do |k|
@@ -68,9 +74,9 @@ class OctocatHerder
 
     private
 
-    # Intended to be overridden in classes using OctocatHerder::Base,
+    # Intended to be overridden in classes using {OctocatHerder::Base},
     # so they can make the methods they define show up in
-    # #available_attributes.
+    # {#available_attributes}.
     #
     # @since 0.0.1
     def additional_attributes

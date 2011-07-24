@@ -14,7 +14,10 @@ class OctocatHerder
     #
     # @since 0.0.1
     # @param [String] user_name The login name of the desired user.
-    # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
+    #
+    # @param [OctocatHerder::Connection] conn Defaults to
+    #   unauthenticated requests.
+    #
     # @return [OctocatHerder::User]
     def self.fetch(user_name, conn = OctocatHerder::Connection.new)
       user = conn.get("/users/#{user_name}")
@@ -24,7 +27,9 @@ class OctocatHerder
 
     # All repositories owned by the user.
     #
-    # @note This is cached locally to the OctocatHerder::User instance, but at least one API request will be made to populate it initially.
+    # @note This is cached locally to the {OctocatHerder::User}
+    #   instance, but at least one API request will be made to
+    #   populate it initially.
     #
     # @since 0.0.1
     # @return [Array<OctocatHerder::Repository>]
@@ -43,7 +48,8 @@ class OctocatHerder
       @raw['id']
     end
 
-    # The type of account.  Typically one of 'User', or 'Organization'
+    # The type of account.  Typically one of +'User'+, or
+    # +'Organization'+.
     #
     # @since 0.0.1
     # @return [String]

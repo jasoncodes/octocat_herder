@@ -85,7 +85,9 @@ class OctocatHerder
 
     # The owner of the repository.
     #
-    # @note This is cached locally to the instance of OctocatHerder::Repository, but will make an additional API request to populate it initially.
+    # @note This is cached locally to the instance of
+    #   {OctocatHerder::Repository}, but will make an additional API
+    #   request to populate it initially.
     #
     # @since 0.0.1
     # @return [OctocatHerder::User]
@@ -95,7 +97,8 @@ class OctocatHerder
 
     # The open pull requests for the repository.
     #
-    # @note This is _not_ cached, and will make at least one API request every time it is called.
+    # @note This is _not_ cached, and will make at least one API
+    #   request every time it is called.
     #
     # @since 0.0.1
     # @return [Array<OctocatHerder::PullRequest>]
@@ -105,7 +108,8 @@ class OctocatHerder
 
     # The closed pull requests for the repository.
     #
-    # @note This is _not_ cached, and will make at least one API request every time it is called.
+    # @note This is _not_ cached, and will make at least one API
+    #   request every time it is called.
     #
     # @since 0.0.1
     # @return [Array<OctocatHerder::PullRequest>]

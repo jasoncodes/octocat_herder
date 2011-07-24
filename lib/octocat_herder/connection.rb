@@ -23,7 +23,9 @@ class OctocatHerder
     # @since 0.0.1
     attr_reader :oauth2_token
 
-    # If provided a hash of login information, the Connection will attempt to make authenticated requests.
+    # If provided a hash of login information, the
+    # {OctocatHerder::Connection} will attempt to make authenticated
+    # requests.
     #
     # Login information can be provided as
     #   :user_name => 'user', :password => 'pass'
