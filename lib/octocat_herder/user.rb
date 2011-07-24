@@ -17,7 +17,7 @@ class OctocatHerder
     # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
     # @return [OctocatHerder::User]
     def self.fetch(user_name, conn = OctocatHerder::Connection.new)
-      user = raw_get(conn, "/users/#{user_name}")
+      user = conn.get("/users/#{user_name}")
 
       OctocatHerder::User.new(user, conn)
     end

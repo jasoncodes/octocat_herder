@@ -117,8 +117,7 @@ class OctocatHerder
                    raise ArgumentError.new("Unknown account type: #{account_type}")
                  end
 
-      repositories = raw_get(
-        conn,
+      repositories = conn.get(
         "/#{url_base}/#{CGI.escape(login)}/repos",
         :paginated => true,
         :params    => { :type => repository_type }
@@ -130,8 +129,7 @@ class OctocatHerder
     end
 
     def self.fetch(login, repository_name, conn = OctocatHerder::Connection.new)
-      repo_data = raw_get(
-        conn,
+      repo_data = conn.get(
         "/repos/#{CGI.escape(login)}/#{CGI.escape(repository_name)}"
       )
 

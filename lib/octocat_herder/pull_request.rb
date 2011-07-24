@@ -26,8 +26,7 @@ class OctocatHerder
       raise ArgumentError.new("Unknown PullRequest status '#{status}'.  Must be one of ['open', 'closed'].") unless
         ['open', 'closed'].include? status
 
-      pull_requests = raw_get(
-        conn,
+      pull_requests = conn.get(
         "/repos/#{CGI.escape(owner_login.to_s)}/#{CGI.escape(repository_name.to_s)}/pulls",
         :paginated => true,
         :params    => { :state => status },
@@ -70,8 +69,7 @@ class OctocatHerder
     # @param [OctocatHerder::Connection] conn Defaults to unauthenticated requests.
     # @return [OctocatHerder::PullRequest]
     def self.fetch(owner_login, repository_name, pull_request_number, conn = OctocatHerder::Connection.new)
-      request = raw_get(
-        conn,
+      request = conn.get(
         "/repos/#{CGI.escape(owner_login.to_s)}/#{CGI.escape(repository_name.to_s)}/pulls/#{CGI.escape(pull_request_number.to_s)}",
         :headers   => { 'Accept' => 'application/vnd.github-pull.full+json' }
       )
@@ -101,7 +99,7 @@ class OctocatHerder
     def get_detail
       return if @raw_detail_hash
 
-      @raw_detail_hash = raw_get(
+      @raw_detail_hash = connection.get(
         url,
         :headers => { 'Accept' => 'application/vnd.github-pull.full+json' }
       )

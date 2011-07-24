@@ -69,17 +69,102 @@ class OctocatHerder
       end
     end
 
-    # Small wrapper around the standard HTTParty +get+ method, which
-    # handles adding authentication information to the API request.
+    # Execute a GET request against the GitHub v3 API.
     #
-    # @since 0.0.1
+    # @since development
+    #
+    # @param [String] end_point The part of the API URL after
+    #   +'api.github.com'+, including the leading +'/'+.
+    #
+    # @param [Hash] options A Hash of options to be passed down to
+    #   HTTParty, with a couple of extra options.
+    #
+    # @option options [true, false] :paginated Retrieve all pages from
+    #   a paginated end-point.
+    #
+    # @option options [Hash<String, Symbol => String>] :params
+    #   Constructed into a query string using
+    #   {OctocatHerder::Connection#query_string_from_params}.
     def get(end_point, options={})
+      paginated = options.delete(:paginated)
+      options[:params] ||= {}
+
+      options[:params][:per_page] = 100 if paginated and options[:params][:per_page].nil?
+
+      result = raw_get(end_point, options)
+      raise "Unable to retrieve #{end_point}" unless result
+
+      full_result = result.parsed_response
+
+      if paginated
+        if next_page = page_from_headers(result.headers, 'next')
+          options[:params][:page] = next_page
+          options[:paginated]     = true
+
+          full_result += raw_get(end_point, options)
+        end
+      end
+
+      full_result
+    end
+
+    # Small wrapper around HTTParty.get, which handles adding
+    # authentication information to the API request.
+    #
+    # @since development
+    def raw_get(end_point, options={})
+      query_params = options.delete(:params) || {}
+      query_string = query_string_from_params(query_params)
+
       request_options = options.merge(httparty_options)
       if httparty_options.has_key?(:headers) and options.has_key(:headers)
         request_options[:headers] = options[:headers].merge(httparty_options[:headers])
       end
 
-      OctocatHerder::Connection.get(end_point, request_options)
+      OctocatHerder::Connection.get(end_point + query_string, request_options)
+    end
+
+    # Retrieve the page number of a given 'Link:' header from a hash
+    # of HTTP Headers
+    #
+    # +type+ can be one of:
+    # [+'next'+] The immediate next page of results.
+    # [+'last'+] The last page of results.
+    # [+'first'+] The first page of results.
+    # [+'prev'+] The immediate previous page of results.
+    #
+    # @since development
+    #
+    # @raise [ArgumentError] If type is not one of the allowed values.
+    #
+    # @param [Hash] headers
+    #
+    # @param ['next', 'last', 'first', 'prev] type
+    def page_from_headers(headers, type)
+      raise ArgumentError.new(
+        "Unknown type: #{type}"
+      ) unless ['next', 'last', 'first', 'prev'].include? type
+
+      link = LinkHeader.parse(headers['link']).find_link(['rel', type])
+      return unless link
+
+      CGI.parse(URI.parse(link.href).query)['page'].first
+    end
+
+    # Convenience method to generate URL query strings.
+    #
+    # @since development
+    #
+    # @param [Hash] params A Hash of key/values to be turned into a
+    #   URL query string.  Does not support nested data.
+    #
+    # @return [String] Empty string if params is an empty hash,
+    #   otherwise a string of the query parameters with a leading
+    #   +'?'+.
+    def query_string_from_params(params)
+      return '' if params.keys.empty?
+
+      '?' + params.map {|k,v| "#{URI.escape("#{k}")}=#{URI.escape("#{v}")}"}.join('&')
     end
 
     private
