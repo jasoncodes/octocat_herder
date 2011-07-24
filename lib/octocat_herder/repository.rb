@@ -107,8 +107,6 @@ class OctocatHerder
       OctocatHerder::Repository.new(@raw['source'], connection)
     end
 
-    private
-
     def self.list(login, account_type, repository_type, conn = OctocatHerder::Connection.new)
       url_base = case account_type
                    when "User"         then "users"
@@ -135,6 +133,8 @@ class OctocatHerder
 
       new(repo_data, conn)
     end
+
+    private
 
     def additional_attributes
       ['owner_login', 'owner_id', 'owner_avatar_url', 'owner_url']
