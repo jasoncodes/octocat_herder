@@ -135,7 +135,11 @@ class OctocatHerder
     # @since development
     # @return [true, false]
     def authenticated_requests?
-      (user_name and password) or oauth2_token
+      if (user_name and password) or oauth2_token
+        true
+      else
+        false
+      end
     end
 
     # Retrieve the page number of a given 'Link:' header from a hash
