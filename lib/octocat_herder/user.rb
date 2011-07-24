@@ -24,7 +24,7 @@ class OctocatHerder
     def self.fetch(user_name, conn = OctocatHerder::Connection.new)
       user = conn.get("/users/#{CGI.escape(user_name)}")
 
-      OctocatHerder::User.new(user, conn)
+      new(user, conn)
     end
 
     # All repositories owned by the user.
