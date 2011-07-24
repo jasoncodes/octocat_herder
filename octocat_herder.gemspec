@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jacob Helwig"]
-  s.date = %q{2011-07-23}
+  s.date = %q{2011-07-24}
   s.description = %q{This gem provides Ruby bindings to the v3 GitHub API}
   s.email = %q{jacob@technosorcery.net}
   s.extra_rdoc_files = [
@@ -56,6 +56,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<yard>, ["~> 0.6.0"])
+      s.add_development_dependency(%q<rdoc>, ["~> 3.8.0"])
       s.add_development_dependency(%q<bluecloth>, ["~> 2.1.0"])
     else
       s.add_dependency(%q<httparty>, ["~> 0.7.8"])
@@ -66,6 +67,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<yard>, ["~> 0.6.0"])
+      s.add_dependency(%q<rdoc>, ["~> 3.8.0"])
       s.add_dependency(%q<bluecloth>, ["~> 2.1.0"])
     end
   else
@@ -77,6 +79,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<yard>, ["~> 0.6.0"])
+    s.add_dependency(%q<rdoc>, ["~> 3.8.0"])
     s.add_dependency(%q<bluecloth>, ["~> 2.1.0"])
   end
 end

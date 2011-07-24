@@ -10,5 +10,6 @@ group :development do
   gem "jeweler",   "~> 1.6.4"
   gem "rcov",      ">= 0"
   gem "yard",      "~> 0.6.0"
+  gem "rdoc",      "~> 3.8.0"
   gem "bluecloth", "~>2.1.0"
 end
