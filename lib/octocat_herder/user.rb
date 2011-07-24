@@ -60,6 +60,40 @@ class OctocatHerder
       @raw['type']
     end
 
+    # Check if the user authenticated by the provided
+    # {OctocatHerder::Connection} is following the specified user.
+    #
+    # @since development
+    #
+    # @raise [ArgumentError] If user is not a String or an
+    #   OctocatHerder::User
+    #
+    # @raise [ArgumentError] If the connection will not make
+    #   authenticated requests.
+    #
+    # @param [String, OctocatHerder::User] user
+    #
+    # @param [OctocatHerder::Connection] connection An authenticated connection
+    #
+    # @return [true, false]
+    def self.following?(user, connection)
+      raise ArgumentError.new(
+        "Provided user must be a String, or an OctocatHerder::User."
+      ) unless user.is_a?(String) or user.is_a?(OctocatHerder::User)
+
+      raise ArgumentError.new(
+        "Provided connection must make authenticated requests."
+      ) unless connection.authenticated_requests?
+
+      user_name = user.is_a?(OctocatHerder::User) ? user.login : user
+
+      result = connection.raw_get("/user/following/#{CGI.escape(user_name)}")
+
+      # The GitHub API gives us back a "204 No Content" if we are
+      # following the user.
+      result.response.code == "204"
+    end
+
     private
 
     # @api private
