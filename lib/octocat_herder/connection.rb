@@ -27,10 +27,14 @@ class OctocatHerder
     # {OctocatHerder::Connection} will attempt to make authenticated
     # requests.
     #
-    # Login information can be provided as
-    #   :user_name => 'user', :password => 'pass'
-    # or
-    #   :oauth2_token => 'token'
+    # @example Unauthenticated requests
+    #   connection = OctocatHerder::Connection.new
+    #
+    # @example Providing an OAuth2 token
+    #   connection = OctocatHerder::Connection.new :oauth2_token => 'token'
+    #
+    # @example Providing user name & password
+    #   connection = OctocatHerder::Connection.new :user_name => 'user', :password => 'pass'
     #
     # If no hash is provided, then unauthenticated requests will be
     # made.
