@@ -62,6 +62,20 @@ class OctocatHerder
       @raw['type']
     end
 
+    # List of users following this user.
+    #
+    # @since development
+    # @return [Array<OctocatHerder::User>]
+    def followers
+      result = connection.get(
+        "/users/#{CGI.escape(login)}/followers"
+      )
+
+      result.map do |follower|
+        self.class.new(follower, connection)
+      end
+    end
+
     # Check if the user authenticated by the provided
     # {OctocatHerder::Connection} is following the specified user.
     #
