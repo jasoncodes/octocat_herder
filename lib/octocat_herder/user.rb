@@ -1,3 +1,5 @@
+require 'cgi'
+
 require 'octocat_herder/base'
 require 'octocat_herder/connection'
 require 'octocat_herder/repository'
@@ -20,7 +22,7 @@ class OctocatHerder
     #
     # @return [OctocatHerder::User]
     def self.fetch(user_name, conn = OctocatHerder::Connection.new)
-      user = conn.get("/users/#{user_name}")
+      user = conn.get("/users/#{CGI.escape(user_name)}")
 
       OctocatHerder::User.new(user, conn)
     end
