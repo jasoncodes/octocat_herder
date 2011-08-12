@@ -303,6 +303,14 @@ class OctocatHerder
       raw.merge(detail)
     end
 
+    def patch_text
+      @patch_text ||= connection.raw_get(patch_url).body
+    end
+
+    def diff_text
+      @diff_text ||= connection.raw_get(diff_url).body
+    end
+
     private
 
     # Give a full listing of the available information, since we
@@ -312,7 +320,7 @@ class OctocatHerder
     # @api private
     # @since 0.0.1
     def additional_attributes
-      attrs = ['user_avatar_url', 'user_url', 'user_id', 'user_login']
+      attrs = ['user_avatar_url', 'user_url', 'user_id', 'user_login', 'patch_text', 'diff_text']
 
       attrs += @raw_detail_hash.keys if @raw_detail_hash
       attrs += ['merged_by_login', 'merged_by_id', 'merged_by_avatar_url', 'merged_by_url']
