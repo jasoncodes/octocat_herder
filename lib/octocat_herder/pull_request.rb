@@ -300,7 +300,11 @@ class OctocatHerder
       raw = @raw || {}
       detail = @raw_detail_hash || {}
 
-      raw.merge(detail)
+      ret = raw.merge(detail)
+      ret['patch_text'] = patch_text
+      ret['diff_text']  = diff_text
+
+      ret
     end
 
     def patch_text
