@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jacob Helwig"]
-  s.date = %q{2011-07-24}
+  s.date = %q{2011-08-12}
   s.description = %q{This gem provides Ruby bindings to the v3 GitHub API}
   s.email = %q{jacob@technosorcery.net}
   s.extra_rdoc_files = [
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     ".travis.yml",
+    "CONTRIBUTING.markdown",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
