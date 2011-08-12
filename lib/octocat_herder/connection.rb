@@ -77,7 +77,7 @@ class OctocatHerder
 
     # Execute a GET request against the GitHub v3 API.
     #
-    # @since development
+    # @since 0.1.0
     #
     # @param [String] end_point The part of the API URL after
     #   +'api.github.com'+, including the leading +'/'+.
@@ -117,7 +117,7 @@ class OctocatHerder
     # Small wrapper around HTTParty.get, which handles adding
     # authentication information to the API request.
     #
-    # @since development
+    # @since 0.1.0
     def raw_get(end_point, options={})
       query_params = options.delete(:params) || {}
       query_string = query_string_from_params(query_params)
@@ -132,7 +132,7 @@ class OctocatHerder
 
     # Are we making authenticated requests?
     #
-    # @since development
+    # @since 0.1.0
     # @return [true, false]
     def authenticated_requests?
       if (user_name and password) or oauth2_token
@@ -151,7 +151,7 @@ class OctocatHerder
     # ['+first+'] The first page of results.
     # ['+prev+'] The immediate previous page of results.
     #
-    # @since development
+    # @since 0.1.0
     #
     # @raise [ArgumentError] If type is not one of the allowed values.
     #
@@ -171,7 +171,7 @@ class OctocatHerder
 
     # Convenience method to generate URL query strings.
     #
-    # @since development
+    # @since 0.1.0
     #
     # @param [Hash] params A Hash of key/values to be turned into a
     #   URL query string.  Does not support nested data.

@@ -64,7 +64,7 @@ class OctocatHerder
 
     # List of users following this user.
     #
-    # @since development
+    # @since 0.1.0
     # @return [Array<OctocatHerder::User>]
     def followers
       result = connection.get(
@@ -78,7 +78,7 @@ class OctocatHerder
 
     # List of users this user is following.
     #
-    # @since development
+    # @since 0.1.0
     # @return [Array<OctocatHerder::User>]
     def following
       users = connection.get(
@@ -93,7 +93,7 @@ class OctocatHerder
     # Check if the user authenticated by the provided
     # {OctocatHerder::Connection} is following the specified user.
     #
-    # @since development
+    # @since 0.1.0
     #
     # @raise [ArgumentError] If user is not a String or an
     #   OctocatHerder::User
