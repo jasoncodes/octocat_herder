@@ -307,10 +307,19 @@ class OctocatHerder
       ret
     end
 
+    # The pull request as a single patch, with the pull request title
+    # & body as the commit message, and the total diff as the patch.
+    #
+    # @since 0.1.0
+    # @return [String]
     def patch_text
       @patch_text ||= connection.raw_get(patch_url).body
     end
 
+    # The diff introduced by all of the commits in the pull request.
+    #
+    # @since 0.1.0
+    # @return [String]
     def diff_text
       @diff_text ||= connection.raw_get(diff_url).body
     end
