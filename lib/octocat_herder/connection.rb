@@ -119,6 +119,7 @@ class OctocatHerder
     #
     # @since 0.1.0
     def raw_get(end_point, options={})
+      options = options.dup
       query_params = options.delete(:params) || {}
       query_string = query_string_from_params(query_params)
 

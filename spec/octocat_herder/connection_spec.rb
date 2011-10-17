@@ -72,4 +72,17 @@ describe OctocatHerder::Connection do
 
     conn.send(:httparty_options).should == {}
   end
+
+  context '#raw_get' do
+    it 'should not munge the passed in options' do
+      OctocatHerder::Connection.stubs(:get)
+      options = {:params => {'foo' => 'bar'}}
+
+      conn = OctocatHerder::Connection.new :user_name => 'user', :password => 'pass'
+
+      conn.raw_get('/endpoint', options)
+
+      options.should == {:params => {'foo' => 'bar'}}
+    end
+  end
 end
