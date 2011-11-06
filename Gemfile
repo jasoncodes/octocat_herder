@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem "httparty",    "~> 0.7.8"
+gem "httparty",    "~> 0.8.0"
 gem "link_header", "~> 0.0.5"
 
 group :development do
